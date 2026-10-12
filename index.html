@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VoiceCut – voice-controlled video editor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🎬 VoiceCut</h1>
+    <div class="row">
+      <select id="format" title="Layout">
+        <option value="reel">Instagram Reel 9:16</option>
+        <option value="story">Instagram Story 9:16</option>
+        <option value="shorts">YouTube Shorts 9:16</option>
+        <option value="youtube">YouTube 16:9</option>
+        <option value="square">Square 1:1</option>
+      </select>
+      <div class="seg" id="lang">
+        <button data-lang="en-IN" class="active">English</button>
+        <button data-lang="ta-IN">தமிழ்</button>
+      </div>
+      <label class="muted" title="Better Tamil accuracy; needs server + API key"><input type="checkbox" id="cloudSpeech" /> Cloud speech</label>
+      <button id="mic" class="mic">🎤 Start listening</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="stage">
+      <div class="canvas-wrap"><canvas id="canvas"></canvas><div id="safe" class="safe hidden"></div></div>
+      <div class="row center">
+        <button id="btnPlay">▶ Play</button>
+        <button id="btnImport">＋ Import</button>
+        <button id="btnAudio">♪ Add audio</button>
+        <select id="exportFmt" title="Export format"><option value="mp4">MP4</option><option value="webm">WebM</option></select>
+        <button id="btnNew" title="Start a new project">🗑 New</button>
+        <button id="btnExport" class="primary">⬇ Export</button>
+        <span id="time" class="muted">0.0 / 0.0s</span>
+      </div>
+      <input id="fileMedia" type="file" accept="video/*,image/*,audio/*" multiple hidden />
+      <input id="fileAudio" type="file" accept="audio/*" multiple hidden />
+    </section>
+
+    <aside>
+      <form id="typed" class="row">
+        <input id="cmd" placeholder="Type a command (e.g. split, zoom in, பிரி)" autocomplete="off" />
+        <button>Run</button>
+      </form>
+      <div id="log" class="log"></div>
+      <details open>
+        <summary>Commands / கட்டளைகள்</summary>
+        <table class="cheat">
+          <tr><td>split</td><td>பிரி / வெட்டு</td></tr>
+          <tr><td>remove audio / mute</td><td>ஆடியோ நீக்கு / மியூட்</td></tr>
+          <tr><td>include audio / add music</td><td>ஆடியோ சேர் / இசை சேர்</td></tr>
+          <tr><td>crop square / vertical / wide / reset</td><td>கிராப் சதுரம்</td></tr>
+          <tr><td>zoom in / zoom out</td><td>பெரிதாக்கு / சிறிதாக்கு</td></tr>
+          <tr><td>import video</td><td>வீடியோ சேர் / இம்போர்ட்</td></tr>
+          <tr><td>transition fade / slide / zoom / wipe</td><td>டிரான்சிஷன் ஸ்லைடு</td></tr>
+          <tr><td>animation fade / slide / zoom / pulse</td><td>அனிமேஷன் பல்ஸ்</td></tr>
+          <tr><td>reel / story / youtube / shorts</td><td>ரீல் / ஸ்டோரி / யூடியூப்</td></tr>
+          <tr><td>split clip 2 / mute the last clip / go to clip 3 / go to 5 seconds</td><td>கிளிப் 2 ஐ பிரி / கடைசி கிளிப் ஆடியோ நீக்கு</td></tr>
+          <tr><td>trim 2 to 5 / trim first 3 seconds</td><td>ட்ரிம் 2 to 5</td></tr>
+          <tr><td>speed 2x / slow motion / normal speed</td><td>வேகம் 2 / மெதுவாக</td></tr>
+          <tr><td>volume 50 percent / louder / quieter</td><td>ஒலி கூட்டு / ஒலி குறை</td></tr>
+          <tr><td>auto captions / subtitles</td><td>ஆட்டோ கேப்ஷன் / சப்டைட்டில்</td></tr>
+          <tr><td>caption Happy birthday</td><td>கேப்ஷன் வணக்கம்</td></tr>
+          <tr><td>play / pause / undo / delete / export</td><td>ஓடு / நிறுத்து / அன்டூ / அழி / ஏற்றுமதி</td></tr>        </table>
+      </details>
+    </aside>
+  </main>
+
+  <section class="timeline">
+    <div class="timeline-help muted">Drag a clip to reorder it; drag either edge to trim.</div>
+    <div class="tl-scroll" id="tlScroll">
+      <div class="tl-inner" id="tlInner">
+        <div class="track-label">Video</div><div class="track" id="trackV"></div>
+        <div class="track-label">Audio</div><div class="track" id="trackA"></div>
+        <div class="playhead" id="playhead"></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="vendor/mp4-muxer.js"></script>
+  <script src="commands.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
